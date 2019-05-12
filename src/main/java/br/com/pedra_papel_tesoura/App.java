@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class App 
 {
-    private static final Integer NUMERO_RODADAS = 10;
+    private static final Integer NUMERO_RODADAS = 100;
 
     public enum Opcoes {
         PEDRA, PAPEL, TESOURA;
@@ -22,16 +22,17 @@ public class App
 
     public static void main( String[] args ){
         AppUtil.inicializarJogadores(jogadores);
+        List<String> erros = Validator.validate(jogadores);
 
-        if(Validator.isJogadoresValidos(jogadores)){
+        if(!erros.isEmpty()){
+            mostrarErros(erros);
+        } else {
             jogar();
             mostrarResultado();
         }
     }
 
     public static void jogar(){
-        System.out.println( "Iniciando jogo." );
-
         try {
             for(Integer rodada = 0; rodada < NUMERO_RODADAS; rodada++ ){
                 AppUtil.gerarOpcoesDaRodada(jogadores);
@@ -40,12 +41,16 @@ public class App
         } catch (EnumConstantNotPresentException enumException){
             System.out.println(enumException.constantName());
         }
+    }
 
-        System.out.println( "Jogo finalizado." );
+    public static void mostrarErros(List<String> erros){
+        for (String erro : erros) {
+            System.out.println("Erro: " + erro);
+        }
     }
 
     public static void mostrarResultado(){
-        System.out.println("\nResultados: ");
+        System.out.println("Resultados: ");
         for (Jogador jogador : jogadores) {
             System.out.println(jogador.getNome() + ":" +
                 " V:" + jogador.getNumeroVitorias() +

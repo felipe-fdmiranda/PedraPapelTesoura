@@ -2,6 +2,7 @@ package br.com.br.com.util;
 
 import br.com.dominio.Jogador;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,45 +11,41 @@ import java.util.List;
  */
 public class Validator {
 
-    public static Boolean isJogadoresValidos(List<Jogador> jogadores){
-        Boolean isJogadoresValidos = true;
+    public static List<String> validate(List<Jogador> jogadores){
+        List<String> erros = new ArrayList<String>();
 
         if(jogadores.isEmpty()){
-            System.out.println("É preciso inicializar a lista de jogadores.");
-            isJogadoresValidos = false;
+            erros.add("É preciso inicializar a lista de jogadores.");
         } else if(jogadores.size() < 2){
-            System.out.println("É preciso ter pelo menos 2 jogadores.");
-            isJogadoresValidos = false;
+            erros.add("É preciso ter pelo menos 2 jogadores.");
         }
 
-        if(isJogadoresValidos){
-            isJogadoresValidos = validaNomes(jogadores);
+        if(erros.isEmpty()){
+            erros.addAll(validaNomes(jogadores));
         }
 
-        return isJogadoresValidos;
+        return erros;
     }
 
-    private static Boolean validaNomes(List<Jogador> jogadores){
-        Boolean nomesValidos = true;
+    private static List<String> validaNomes(List<Jogador> jogadores){
+        List<String> erros = new ArrayList<String>();
 
         for (Integer i = 0; i < jogadores.size(); i++) {
             if(jogadores.get(i).getNome().trim().isEmpty()){
-                System.out.println("Não pode ter jogarador com nome vazio.");
-                nomesValidos = false;
+                erros.add("Não pode ter jogador com nome vazio.");
                 break;
             }
 
-            if(nomesValidos){
+            if(erros.isEmpty()){
                 for (Integer j = 0; j < jogadores.size(); j++) {
                     if(i != j && jogadores.get(i).getNome().trim().equals(jogadores.get(j).getNome().trim())){
-                        System.out.println("Existem jogaradores com nomes repetidos.");
-                        nomesValidos = false;
+                        erros.add("Existem jogadores com nomes repetidos.");
                         break;
                     }
                 }
             }
         }
 
-        return nomesValidos;
+        return erros;
     }
 }
